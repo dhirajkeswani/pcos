@@ -13,6 +13,7 @@ from sklearn.impute import KNNImputer
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import accuracy_score
 
 # define functions
 def main(args):
@@ -63,9 +64,34 @@ def split_data(df):
 #     # train model
 #     LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)
 
-def train_model(model, X_train, X_test, y_train, y_test):
+def train_model(model, X_train, X_test, y_train, y_test):  #we can take another param as model_params as a list and apply that
     # train model
-    model.fit(X_train, y_train)
+    if model == "RandomForestClassifier":
+        selected_model = RandomForestClassifier()
+        selected_model.fit(X_train, y_train)
+
+    elif model == "AdaBoostClassifier":
+        selected_model = AdaBoostClassifier()
+        selected_model.fit(X_train, y_train)
+
+    elif model == "LogisticRegression":
+        selected_model = LogisticRegression()
+        selected_model.fit(X_train, y_train)
+
+    else:
+        raise RuntimeError("Valid model name not selected")
+
+    y_train_pred = selected_model.predict(X_train)
+    y_test_pred = selected_model.predict(X_test)
+
+    train_accuracy = accuracy_score(y_train, y_train_pred)
+    test_accuracy = accuracy_score(y_test, y_test_pred)
+
+    mlflow.log_metric("train_accuracy", train_accuracy)
+    mlflow.log_metric("test_accuracy", test_accuracy)
+    mlflow.log_metric("model", model)
+    mlflow.autolog()
+
 
 
 def parse_args():
@@ -76,7 +102,7 @@ def parse_args():
     parser.add_argument("--training_data", dest='training_data',
                         type=str)
     parser.add_argument("--model", dest='model',
-                        default=LogisticRegression(C=1/0.01, solver="liblinear"))
+                        type=str, default="LogisticRegression")
 
     # parse args
     args = parser.parse_args()

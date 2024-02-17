@@ -1,0 +1,15 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+code: model
+command: >-
+  python train_2.py
+  --training_data ${{inputs.training_data}}
+  --n_est ${{inputs.n_est}}
+inputs:
+  training_data: 
+    type: uri_folder 
+    path: azureml:mlops-trial-data-asset:1
+  n_est: 80
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+compute: azureml:mlops-trial-compute
+experiment_name: mlops-trial
+description: Train a classification model on diabetes data using a registered dataset as input.

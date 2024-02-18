@@ -81,16 +81,16 @@ def train_model(model, X_train, X_test, y_train, y_test):  #we can take another 
     else:
         raise RuntimeError("Valid model name not selected")
 
-    y_train_pred = selected_model.predict(X_train)
-    y_test_pred = selected_model.predict(X_test)
+    # y_train_pred = selected_model.predict(X_train)
+    # y_test_pred = selected_model.predict(X_test)
 
-    train_accuracy = accuracy_score(y_train, y_train_pred)
-    test_accuracy = accuracy_score(y_test, y_test_pred)
+    # train_accuracy = accuracy_score(y_train, y_train_pred)
+    # test_accuracy = accuracy_score(y_test, y_test_pred)
 
-    mlflow.log_metric("train_accuracy", train_accuracy)
-    mlflow.log_metric("test_accuracy", test_accuracy)
-    mlflow.log_metric("model", model)
-    mlflow.autolog()
+    # mlflow.log_metric("train_accuracy", train_accuracy)
+    # mlflow.log_metric("test_accuracy", test_accuracy)
+    # mlflow.log_metric("model", model)
+    # mlflow.autolog()
 
 
 
